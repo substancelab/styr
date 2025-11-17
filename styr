@@ -3,13 +3,13 @@
 # frozen_string_literal: true
 
 require "bundler/inline"
+require "optparse"
 require "singleton"
 
 gemfile do
   source "https://rubygems.org"
 
   gem "toml-rb"
-  gem "tty-option"
   gem "tty-table"
 end
 
@@ -105,24 +105,27 @@ class Styr
   end
 
   class CLI
-    include TTY::Option
-
-    program "styr"
-
     class << self
       def process(input_command, args = [])
+        global_parser = OptionParser.new do |opts|
+          opts.banner = "styr task [options] command"
+          opts.on("--help", "Show helpful information")
+          opts.on("--target TARGET", "Target to perform the task on")
+        end
+
+        global_options = {}
+        global_parser.order!(:into => global_options)
+
+        task_name = ARGV[0].to_s.downcase
         task = tasks.find do |task_class|
-          task_class.command.include?(input_command)
+          task_class::NAME == task_name
         end
 
         if task
-          command = task.new
-          p ["Parsing", input_command, args, ARGV]
-          command.parse
-          command.run
+          task.new.process(ARGV[1..], global_options)
         else
-          puts "Wut?"
-          puts Styr::CLI.new.help
+          puts Styr::CLI::Task.new.description
+          exit 1
         end
       end
 
@@ -135,58 +138,26 @@ class Styr
     end
 
     class Task < CLI
-      include TTY::Option
+      attr_accessor :params
 
-      command "run"
-
-      usage do
-        desc "Do stuff"
-      end
-
-      flag :help do
-        desc "Print usage"
-      end
-
-      def run
-        if params[:help]
-          puts "help"
-          print help
-        elsif params.errors.any?
-          puts "errors"
-          puts params.errors.summary
-        else
-          puts "params"
-          pp params.to_h
-        end
+      def description
+        "TODO: Generic help"
       end
     end
 
     class RunTask < Task
-      command "run"
+      NAME = "run"
 
-      option :target do
-        convert :list
-        desc "Target to run the command on"
-        long "--target=TARGET"
-        permit Styr.instance.targets.map(&:name)
-        required
-        short "-t"
-      end
+      def process(args, global_options = {})
+        self.params = {
+          :command => args.join(" "),
+          :help => global_options[:help],
+          :target => global_options[:target],
+        }
 
-      argument :remote_command do
-        required
-        desc "The command to run on the target"
-      end
-
-      usage do
-        desc "Run a command on the specified target"
-      end
-
-      def run
         exit_with_help if params[:help]
 
-        validate_inputs
-        validate_targets(params[:targets])
+        validate_targets(params[:target])
 
         perform
       end
@@ -194,13 +165,15 @@ class Styr
       private
 
       def exit_with_help
-        puts help
+        puts "Usage: styr run --target TARGET command to run on the target"
         exit 0
       end
 
       def perform
         targets.each do |target_name|
-          puts "Pretending to run something on #{target_name}..."
+          target = Styr.instance.targets.find { |t| t.name.to_s == target_name.to_s }
+          backend = target.backend
+          puts "Pretending to run \`#{params[:command]}\` on #{target.name} with #{backend}..."
         end
       end
 
@@ -223,7 +196,7 @@ class Styr
         unknown_targets = target_names.reject do |target_name|
           known_targets.include?(target_name)
         end
-        return if unknown_targets.empty?
+        return if target_names.any? && unknown_targets.empty?
 
         puts "Unknown targets: #{unknown_targets.join(', ')}. Expected one of: #{known_targets.join(', ')}"
         exit 1
@@ -231,13 +204,32 @@ class Styr
     end
 
     class TargetsTask < Task
-      command "targets"
+      NAME = "targets"
 
-      usage do
-        desc "List known targets"
+      def description
+        "List known targets"
       end
 
-      def run
+      def process(args, global_options = {})
+        self.params = {
+          :help => global_options[:help],
+        }
+
+        exit_with_help if params[:help]
+
+        perform
+      end
+
+      private
+
+      def exit_with_help
+        puts description
+        puts
+        puts "Usage: styr targets"
+        exit 0
+      end
+
+      def perform
         targets = Styr.instance.targets.map do |target|
           [target.name, target.backend, target.config["app"]]
         end
