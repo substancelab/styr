@@ -10,6 +10,7 @@ gemfile do
   source "https://rubygems.org"
 
   gem "toml-rb"
+  gem "tty-command"
   gem "tty-table"
 end
 
@@ -35,7 +36,7 @@ class Styr
     end
 
     def backend
-      @backend ||= Styr::Backend.from_config(@config.fetch("backend"))
+      @backend ||= Styr::Backend.from_config(@config)
     end
   end
 end
@@ -66,7 +67,14 @@ class Styr
       end
 
       def execute(command)
-        puts "Executing '#{command}' on backend #{@config['backend']} for app #{@config['app']}"
+        runner = TTY::Command.new
+        runner.run(
+          "heroku run",
+          command,
+          "--app",
+          @config['app'],
+          :pty => true
+        )
       end
 
       def to_s
@@ -80,7 +88,7 @@ class Styr
       end
 
       def execute(command)
-        puts "Executing '#{command}' on backend #{@config['backend']} for app #{@config['app']}"
+        puts "Executing '#{command}' via #{self} with #{@config['app']}"
       end
 
       def to_s
@@ -89,7 +97,8 @@ class Styr
     end
 
     class << self
-      def from_config(backend_type, config = {})
+      def from_config(config)
+        backend_type = config.fetch("backend")
         backend_class =
           case backend_type.downcase
           when "heroku"
@@ -173,7 +182,7 @@ class Styr
         targets.each do |target_name|
           target = Styr.instance.targets.find { |t| t.name.to_s == target_name.to_s }
           backend = target.backend
-          puts "Pretending to run \`#{params[:command]}\` on #{target.name} with #{backend}..."
+          backend.execute(params[:command])
         end
       end
 
