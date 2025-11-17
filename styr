@@ -183,6 +183,8 @@ class Styr
       end
 
       def run
+        exit_with_help if params[:help]
+
         validate_inputs
         validate_targets(params[:targets])
 
@@ -190,6 +192,11 @@ class Styr
       end
 
       private
+
+      def exit_with_help
+        puts help
+        exit 0
+      end
 
       def perform
         targets.each do |target_name|
