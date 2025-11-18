@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+require "pathname"
+
+require_relative "backend"
+require_relative "backend/heroku_backend"
+require_relative "backend/ssh_backend"
+
+class Styr
+  class Config
+    CONFIG_PATH = Pathname.new(Dir.pwd).join(".config/styr.toml")
+
+    def self.load
+      @config ||= if File.exist?(CONFIG_PATH) # rubocop:disable Naming/MemoizedInstanceVariableName
+        TomlRB.load_file(CONFIG_PATH)
+      else
+        {}
+      end
+    end
+  end
+
+  class Target
+    attr_reader :name, :config
+
+    def initialize(name, config)
+      @name = name
+      @config = config
+    end
+
+    def backend
+      @backend ||= Styr::Backend.from_config(@config)
+    end
+  end
+end
