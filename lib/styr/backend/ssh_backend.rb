@@ -1,6 +1,20 @@
+# frozen_string_literal: true
+
+require_relative "../target"
+
 class Styr
   class Backend
     class SSHBackend
+      # A Target reached via SSH
+      class Target < Styr::Target
+        def display
+          [
+            config.values_at("user", "host").compact.join("@"),
+            config["path"]
+        ].join(":")
+        end
+      end
+
       def initialize(config)
         @config = config
       end

@@ -1,6 +1,14 @@
+require_relative "../target"
+
 class Styr
   class Backend
     class HerokuBackend
+      class Target < Styr::Target
+        def display
+          config["app"]
+        end
+      end
+
       def initialize(config)
         @config = config
       end

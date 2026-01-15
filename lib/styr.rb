@@ -3,6 +3,7 @@
 require "singleton"
 
 require_relative "styr/cli"
+require_relative "styr/backend"
 
 class Styr
   include Singleton
@@ -11,13 +12,17 @@ class Styr
     Styr::CLI.process(input_command, args)
   end
 
+  # Returns all configured targets
+  #
+  # @return [Array<Styr::Target>]
   def targets
     return @targets if @targets
 
     config = Config.load
     targets_config = config["targets"] || {}
     @targets = targets_config.map do |target_name, target_config|
-      Target.new(target_name, target_config)
+      backend = Styr::Backend.from_config(target_config)
+      backend.class::Target.new(target_name, target_config)
     end
   end
 end

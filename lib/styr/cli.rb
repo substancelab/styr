@@ -132,11 +132,11 @@ class Styr
 
       def perform
         targets = Styr.instance.targets.map do |target|
-          [target.name, target.backend, target.config["app"]]
+          [target.name, target.backend, target.display]
         end
 
         table = TTY::Table.new(
-          :header => ["Name", "Backend", "App"],
+          :header => ["Name", "Backend", "Details"],
           :rows => targets
         )
 
