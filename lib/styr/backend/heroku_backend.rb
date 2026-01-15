@@ -14,14 +14,8 @@ class Styr
       end
 
       def execute(command)
-        runner = TTY::Command.new
-        runner.run(
-          "heroku run",
-          command,
-          "--app",
-          @config['app'],
-          :pty => true
-        )
+        # Use exec to replace the current process with heroku run for proper interactive I/O
+        exec("heroku", "run", command, "--app", @config['app'])
       end
 
       def to_s
