@@ -20,7 +20,25 @@ class Styr
       end
 
       def execute(command)
-        puts "Executing '#{command}' via #{self} with #{@config['app']}"
+        runner = TTY::Command.new
+
+        # Build SSH connection string
+        ssh_target = @config["host"]
+        ssh_target = "#{@config['user']}@#{ssh_target}" if @config["user"]
+
+        # Build remote command with optional path change
+        remote_command = if @config["path"]
+          "cd #{@config['path']} && #{command}"
+        else
+          command
+        end
+
+        runner.run(
+          "ssh",
+          ssh_target,
+          remote_command,
+          :pty => true
+        )
       end
 
       def to_s
