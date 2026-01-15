@@ -5,6 +5,7 @@ require "pathname"
 require_relative "backend"
 require_relative "backend/heroku_backend"
 require_relative "backend/ssh_backend"
+require_relative "target"
 
 class Styr
   class Config
@@ -16,19 +17,6 @@ class Styr
       else
         {}
       end
-    end
-  end
-
-  class Target
-    attr_reader :name, :config
-
-    def initialize(name, config)
-      @name = name
-      @config = config
-    end
-
-    def backend
-      @backend ||= Styr::Backend.from_config(@config)
     end
   end
 end
