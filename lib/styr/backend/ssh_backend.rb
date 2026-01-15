@@ -20,8 +20,6 @@ class Styr
       end
 
       def execute(command)
-        runner = TTY::Command.new
-
         # Build SSH connection string
         ssh_target = @config["host"]
         ssh_target = "#{@config['user']}@#{ssh_target}" if @config["user"]
@@ -33,12 +31,8 @@ class Styr
           command
         end
 
-        runner.run(
-          "ssh",
-          ssh_target,
-          remote_command,
-          :pty => true
-        )
+        # Use exec to replace the current process with SSH for proper interactive I/O
+        exec("ssh", "-t", ssh_target, remote_command)
       end
 
       def to_s
