@@ -41,12 +41,16 @@ class Styr
           [target.name, target.backend, target.display]
         end
 
-        table = TTY::Table.new(
-          :header => ["Name", "Backend", "Details"],
-          :rows => targets
-        )
+        if targets.any?
+          table = TTY::Table.new(
+            :header => ["Name", "Backend", "Details"],
+            :rows => targets
+          )
 
-        puts table.render(:unicode, padding: [0,1])
+          puts table.render(:unicode, padding: [0,1])
+        else
+          puts "No targets configured."
+        end
       end
     end
   end
