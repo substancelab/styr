@@ -4,9 +4,6 @@ require "optparse"
 
 require_relative "config"
 
-require_relative "cli/run_task"
-require_relative "cli/targets_task"
-
 class Styr
   class CLI
     class << self
@@ -52,10 +49,7 @@ class Styr
         puts global_parser
         puts
         puts "Available tasks:"
-
-        task_helps.each do |name, description|
-          puts("   %-#{longest_name_length}s - %s" % [name, description])
-        end
+        Styr::CLI::TasksTask.new.process([], {})
       end
 
       def output_help_for_task(task)
@@ -63,10 +57,7 @@ class Styr
       end
 
       def tasks
-        [
-          RunTask,
-          TargetsTask
-        ]
+        Styr.instance.tasks
       end
     end
   end
