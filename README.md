@@ -1,6 +1,18 @@
 # styr
-Remote control your application without having to remember IP addresses or SSH commands
 
+Remote control your application without having to remember IP addresses or SSH commands.
+
+styr is a command line tool that remembers your IP addresses, usernames, Heroku node names, and all those other details you need to access whatever backend your application is running on.
+
+## Sample usage
+
+Run an uptime check on your production server:
+
+    styr --target=production run uptime
+
+Open a rails console on your background jobs processing server to investigate failing jobs:
+
+    styr --target=worker run bundle exec rails console
 
 ## Getting started
 
@@ -31,6 +43,11 @@ user = "deploy"
 backend = "heroku"
 app = "simply-dingo"
 ```
+
+## Supported backends
+
+- Heroku
+- SSH
 
 ## Anatomy of a styr session
 
