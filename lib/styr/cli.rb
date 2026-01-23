@@ -31,11 +31,12 @@ class Styr
           exit 0
         end
 
-
         if task
           task.new.process(ARGV[1..], global_options)
         else
           puts "Unknown task: #{task_name}"
+          puts
+          puts "Expected one of #{tasks.map(&:name).join(', ')}"
           exit 1
         end
       end
