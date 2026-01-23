@@ -46,7 +46,7 @@ class Styr
           :rows => targets
         )
 
-        puts table.render(:ascii)
+        puts table.render(:unicode, padding: [0,1])
       end
     end
   end
