@@ -21,15 +21,19 @@ class Styr
         global_parser.order!(:into => global_options)
 
         task_name = ARGV[0].to_s.downcase
-
-        if global_options[:help] || task_name.nil? || task_name == ""
-          output_help(global_parser)
-          exit 0
-        end
-
         task = tasks.find do |task_class|
           task_class.name == task_name
         end
+
+        if global_options[:help]
+          if task
+            output_help_for_task(task)
+          else
+            output_help(global_parser)
+          end
+          exit 0
+        end
+
 
         if task
           task.new.process(ARGV[1..], global_options)
@@ -52,7 +56,10 @@ class Styr
         task_helps.each do |name, description|
           puts("   %-#{longest_name_length}s - %s" % [name, description])
         end
+      end
 
+      def output_help_for_task(task)
+        puts task.help
       end
 
       def tasks

@@ -13,6 +13,21 @@ class Styr
           "Run a command on a target"
         end
 
+        def help
+          [
+            description,
+            "",
+            "Usage: #{$0} --target TARGET run COMMAND",
+            "",
+            "Options:",
+            "  TARGET    Target to run the command on",
+            "  COMMAND   Command to run on the target",
+            "",
+            "Example:",
+            "  #{$0} --target production run 'ls -la'",
+          ].join("\n")
+        end
+
         def name
           "run"
         end
@@ -25,19 +40,12 @@ class Styr
           :target => global_options[:target],
         }
 
-        exit_with_help if params[:help]
-
         validate_targets(params[:target])
 
         perform
       end
 
       private
-
-      def exit_with_help
-        puts "Usage: styr run --target TARGET command to run on the target"
-        exit 0
-      end
 
       def perform
         targets.each do |target_name|

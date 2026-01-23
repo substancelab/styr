@@ -13,6 +13,14 @@ class Styr
           "List configured targets"
         end
 
+        def help
+          [
+            description,
+            "",
+            "Usage: #{$0} targets",
+          ].join("\n")
+        end
+
         def name
           "targets"
         end
@@ -23,19 +31,10 @@ class Styr
           :help => global_options[:help],
         }
 
-        exit_with_help if params[:help]
-
         perform
       end
 
       private
-
-      def exit_with_help
-        puts description
-        puts
-        puts "Usage: styr targets"
-        exit 0
-      end
 
       def perform
         targets = Styr.instance.targets.map do |target|
