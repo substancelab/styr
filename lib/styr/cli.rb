@@ -22,7 +22,7 @@ class Styr
           task_class.name == task_name
         end
 
-        if global_options[:help]
+        if global_options[:help] || task_name == ""
           if task
             output_help_for_task(task)
           else
