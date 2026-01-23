@@ -8,7 +8,15 @@ require_relative "task"
 class Styr
   class CLI
     class RunTask < Task
-      NAME = "run"
+      class << self
+        def description
+          "Run a command on a target"
+        end
+
+        def name
+          "run"
+        end
+      end
 
       def process(args, global_options = {})
         self.params = {

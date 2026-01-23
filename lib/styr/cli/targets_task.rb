@@ -8,10 +8,14 @@ require_relative "task"
 class Styr
   class CLI
     class TargetsTask < Task
-      NAME = "targets"
+      class << self
+        def description
+          "List configured targets"
+        end
 
-      def description
-        "List known targets"
+        def name
+          "targets"
+        end
       end
 
       def process(args, global_options = {})

@@ -12,7 +12,7 @@ class Styr
     class << self
       def process(input_command, args = [])
         global_parser = OptionParser.new do |opts|
-          opts.banner = "styr [options] task [task options]"
+          opts.banner = "styr [options] [--target] task [task options]"
           opts.on("--help", "Show helpful information")
           opts.on("--target TARGET", "Target to perform the task on")
         end
@@ -23,20 +23,36 @@ class Styr
         task_name = ARGV[0].to_s.downcase
 
         if global_options[:help] || task_name.nil? || task_name == ""
-          puts global_parser
+          output_help(global_parser)
           exit 0
         end
 
         task = tasks.find do |task_class|
-          task_class::NAME == task_name
+          task_class.name == task_name
         end
 
         if task
           task.new.process(ARGV[1..], global_options)
         else
-          puts Styr::CLI::Task.new.description
+          puts "Unknown task: #{task_name}"
           exit 1
         end
+      end
+
+      private
+
+      def output_help(global_parser)
+        task_helps = tasks.map { |task| [task.name, task.description] }
+        longest_name_length = task_helps.map { |name, _| name.length }.max || 0
+
+        puts global_parser
+        puts
+        puts "Available tasks:"
+
+        task_helps.each do |name, description|
+          puts("   %-#{longest_name_length}s - %s" % [name, description])
+        end
+
       end
 
       def tasks
