@@ -9,7 +9,6 @@ gemfile do
   source "https://rubygems.org"
 
   gem "toml-rb"
-  gem "tty-command"
   gem "tty-table"
 end
 

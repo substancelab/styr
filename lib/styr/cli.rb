@@ -44,9 +44,6 @@ class Styr
       private
 
       def output_help(global_parser)
-        task_helps = tasks.map { |task| [task.name, task.description] }
-        longest_name_length = task_helps.map { |name, _| name.length }.max || 0
-
         puts global_parser
         puts
         puts "Available tasks:"
