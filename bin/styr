@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 require "bundler/inline"
-require_relative "lib/styr"
+require_relative "../lib/styr"
 
 gemfile do
   source "https://rubygems.org"

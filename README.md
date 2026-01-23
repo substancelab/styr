@@ -9,7 +9,7 @@ Remote control your application without having to remember IP addresses or SSH c
 Personally, I prefer to have it checked out somewhere and link it there:
 
 ```bash
-$ ln -s ~/path/to/styr bin/styr
+$ ln -s ~/path/to/styr/bin/styr bin/styr
 ```
 
 ### 2. Add a config file
