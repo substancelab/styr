@@ -16,17 +16,30 @@ Open a rails console on your background jobs processing server to investigate fa
 
 ## Getting started
 
-### 1. Install styr into your application
+### Requirements
 
-Personally, I prefer to have it checked out somewhere and link it there:
+* Ruby
+
+### 1. Install styr
+
+Clone the repository to somewhere on your machine.
 
 ```bash
-$ ln -s ~/path/to/styr/bin/styr bin/styr
+$ git clone https://github.com/substancelab/styr.git
 ```
 
-### 2. Add a config file
+You can now run styr from that location by providing the full path to it
 
-Styr looks for a config file at `.config/styr.toml` relative to your current working directory. So if you're at `~/projects/foo`, running `bin/styr`, the config file should be at `~/projects/foo/.config/styr.toml`.
+```bash
+$ /path/to/install/bin/styr
+```
+
+or add that installation directory to your `PATH` or symlink the binary into a
+directory already in your `PATH`.
+
+### 2. Add a config file to your application
+
+Styr looks for a config file at `.config/styr.toml` relative to your current working directory. So if you're running `styr` at `~/projects/foo` the config file should be at `~/projects/foo/.config/styr.toml`.
 
 ### 3. Add your application targets
 
