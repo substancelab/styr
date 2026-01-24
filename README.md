@@ -84,7 +84,8 @@ The SSH backend uses ssh behind the scenes, thus relies on your existing ssh con
     script/styr --target=production run rails console
     |_________| |_________________| |_| |___________|
     |              |                |   |
-    `- styr binary |                |   |
+    `- Path to styr binary          |   |
+                   |                |   |
                    `- The target to run a task against
                                     |   |
                                     `- The task to run
