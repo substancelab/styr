@@ -59,8 +59,25 @@ app = "simply-dingo"
 
 ## Supported backends
 
-- Heroku
-- SSH
+Each target has a specified backend. styr currently support SSH and Heroku backends.
+
+### Heroku (`backend = "heroku"`)
+
+The Heroku backend basically just wraps `npx heroku`, so you need npm installed for it to work.
+
+#### Configuration
+
+- `app`: Name of the application on Heroku.
+
+## SSH (`backend = "ssh"`)
+
+The SSH backend uses ssh behind the scenes, thus relies on your existing ssh config options and keys. If you can manually ssh into your server, you should be able to use styr for it.
+
+### Configuration
+
+- `host`: The host to connect to, usually an IP address or a hostname.
+- `path`: The path to your application on the target server. Styr `cd`s to this directory before running your task.
+- `user`: SSH username to use for the connection.
 
 ## Anatomy of a styr session
 
