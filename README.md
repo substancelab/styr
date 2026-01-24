@@ -6,7 +6,7 @@ styr is a command line tool that remembers IP addresses, usernames, Heroku dyno 
 
 ## Sample usage
 
-Run an uptime check on your production server:
+Run an uptime check on your Heroku production application:
 
     styr --target=production run uptime
 
