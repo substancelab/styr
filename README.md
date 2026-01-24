@@ -1,8 +1,8 @@
 # styr
 
-Remote control your application without having to remember IP addresses or SSH commands.
+Remote control your application without having to remember where it is hosted.
 
-styr is a command line tool that remembers your IP addresses, usernames, Heroku node names, and all those other details you need to access whatever backend your application is running on.
+styr is a command line tool that remembers IP addresses, usernames, Heroku dyno names, and all those other details you need to access whatever hosting provider your application is running on.
 
 ## Sample usage
 
