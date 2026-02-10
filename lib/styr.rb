@@ -5,6 +5,8 @@ require "singleton"
 require_relative "styr/backend"
 require_relative "styr/cli"
 require_relative "styr/cli/run_task"
+require_relative "styr/cli/config_task"
+require_relative "styr/cli/run_task"
 require_relative "styr/cli/targets_task"
 require_relative "styr/cli/tasks_task"
 
@@ -31,6 +33,7 @@ class Styr
 
   def tasks
     [
+      Styr::CLI::ConfigTask,
       Styr::CLI::RunTask,
       Styr::CLI::TargetsTask,
       Styr::CLI::TasksTask
