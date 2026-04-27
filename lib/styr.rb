@@ -47,14 +47,21 @@ class Styr
   end
 
   def custom_tasks
+    reserved = builtin_tasks.map { |t| t.name.to_s.downcase }.to_set
     tasks_config = Config.load["tasks"] || {}
     tasks_config.map do |task_name, task_config|
+      normalized_name = task_name.to_s.downcase
       command = task_config["command"]
       unless command.is_a?(String) && !command.strip.empty?
-        warn "styr: task '#{task_name}' has no valid command configured and will be skipped"
+        warn "styr: task '#{normalized_name}' has no valid command configured and will be skipped"
         next
       end
-      Styr::CLI::ConfigurableTask.for(task_name, command)
+      if reserved.include?(normalized_name)
+        warn "styr: task '#{normalized_name}' conflicts with an existing task and will be skipped"
+        next
+      end
+      reserved.add(normalized_name)
+      Styr::CLI::ConfigurableTask.for(normalized_name, command)
     end.compact
   end
 end
