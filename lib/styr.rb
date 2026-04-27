@@ -4,8 +4,8 @@ require "singleton"
 
 require_relative "styr/backend"
 require_relative "styr/cli"
-require_relative "styr/cli/run_task"
 require_relative "styr/cli/config_task"
+require_relative "styr/cli/custom_task"
 require_relative "styr/cli/run_task"
 require_relative "styr/cli/targets_task"
 require_relative "styr/cli/tasks_task"
@@ -36,7 +36,16 @@ class Styr
       Styr::CLI::ConfigTask,
       Styr::CLI::RunTask,
       Styr::CLI::TargetsTask,
-      Styr::CLI::TasksTask
-    ]
+      Styr::CLI::TasksTask,
+    ] + custom_tasks
+  end
+
+  private
+
+  def custom_tasks
+    tasks_config = Config.load["tasks"] || {}
+    tasks_config.map do |task_name, task_config|
+      Styr::CLI::CustomTask.for(task_name, task_config["command"])
+    end
   end
 end
