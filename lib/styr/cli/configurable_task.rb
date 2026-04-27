@@ -5,7 +5,7 @@ require_relative "task"
 
 class Styr
   class CLI
-    class CustomTask < Task
+    class ConfigurableTask < Task
       class << self
         def for(task_name, command)
           Class.new(self) do
