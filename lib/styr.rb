@@ -49,7 +49,12 @@ class Styr
   def custom_tasks
     tasks_config = Config.load["tasks"] || {}
     tasks_config.map do |task_name, task_config|
-      Styr::CLI::ConfigurableTask.for(task_name, task_config["command"])
-    end
+      command = task_config["command"]
+      unless command.is_a?(String) && !command.strip.empty?
+        warn "styr: task '#{task_name}' has no valid command configured and will be skipped"
+        next
+      end
+      Styr::CLI::ConfigurableTask.for(task_name, command)
+    end.compact
   end
 end
