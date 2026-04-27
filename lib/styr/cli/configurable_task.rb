@@ -27,10 +27,11 @@ class Styr
                 [
                   description,
                   "",
-                  "Usage: #{$0} --target TARGET #{name}",
+                  "Usage: #{$0} --target TARGET #{name} [ARGS]",
                   "",
                   "Options:",
                   "  TARGET    Target to run the command on",
+                  "  ARGS      Additional arguments appended to the configured command",
                 ].join("\n")
               end
             end
@@ -39,7 +40,7 @@ class Styr
       end
 
       def process(args, global_options = {})
-        Styr::CLI::RunTask.new.process([self.class.command], global_options)
+        Styr::CLI::RunTask.new.process([self.class.command, *args], global_options)
       end
     end
   end
