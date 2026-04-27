@@ -79,6 +79,33 @@ The SSH backend uses ssh behind the scenes, thus relies on your existing ssh con
 - `path`: The path to your application on the target server. Styr `cd`s to this directory before running your task.
 - `user`: SSH username to use for the connection.
 
+## Configurable tasks
+
+If you find yourself running the same commands repeatedly, you can define them as named tasks in your config file. This saves you from typing out the full command each time and makes common operations discoverable via `styr tasks`.
+
+Add a `[tasks.NAME]` section to your `.config/styr.toml`:
+
+```toml
+[tasks.console]
+command = "bundle exec rails console"
+
+[tasks.logs]
+command = "tail -f log/production.log"
+```
+
+Each configured task then works as a first-class styr task:
+
+```bash
+# List tasks — your custom tasks appear alongside the built-in ones
+styr tasks
+
+# Run the task against a target
+styr --target=production console
+styr --target=worker logs
+```
+
+A configurable task is equivalent to running `styr --target=TARGET run COMMAND`, so all the usual rules apply — you still need to specify a target.
+
 ## Anatomy of a styr session
 
     script/styr --target=production run rails console
