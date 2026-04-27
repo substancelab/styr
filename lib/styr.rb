@@ -32,15 +32,19 @@ class Styr
   end
 
   def tasks
+    builtin_tasks + custom_tasks
+  end
+
+  private
+
+  def builtin_tasks
     [
       Styr::CLI::ConfigTask,
       Styr::CLI::RunTask,
       Styr::CLI::TargetsTask,
       Styr::CLI::TasksTask,
-    ] + custom_tasks
+    ]
   end
-
-  private
 
   def custom_tasks
     tasks_config = Config.load["tasks"] || {}
