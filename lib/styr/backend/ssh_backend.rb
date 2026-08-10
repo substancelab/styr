@@ -31,8 +31,7 @@ class Styr
           command
         end
 
-        # Use exec to replace the current process with SSH for proper interactive I/O
-        exec("ssh", "-t", ssh_target, remote_command)
+        system("ssh", "-t", ssh_target, remote_command)
       end
 
       def to_s
