@@ -48,10 +48,13 @@ class Styr
       private
 
       def perform
-        success = targets.reduce(true) do |result, target_name|
+        multiple_targets = targets.length > 1
+        success = true
+
+        targets.each do |target_name|
           target = Styr.instance.targets.find { |t| t.name.to_s == target_name.to_s }
-          puts "==> #{target_name}" if targets.length > 1
-          target.backend.execute(params[:command]) && result
+          puts "==> #{target_name}" if multiple_targets
+          success = false unless target.backend.execute(params[:command])
         end
 
         exit 1 unless success
