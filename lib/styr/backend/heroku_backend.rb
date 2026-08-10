@@ -14,8 +14,7 @@ class Styr
       end
 
       def execute(command)
-        # Use exec to replace the current process with heroku run for proper interactive I/O
-        exec("heroku", "run", command, "--app", @config['app'])
+        system("heroku", "run", command, "--app", @config['app'])
       end
 
       def to_s

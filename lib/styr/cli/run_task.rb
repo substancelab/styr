@@ -37,7 +37,7 @@ class Styr
         self.params = {
           :command => args.join(" "),
           :help => global_options[:help],
-          :target => global_options[:target],
+          :target => split_targets(global_options[:target]),
         }
 
         validate_targets(params[:target])
@@ -48,15 +48,24 @@ class Styr
       private
 
       def perform
+        multiple_targets = targets.length > 1
+        success = true
+
         targets.each do |target_name|
           target = Styr.instance.targets.find { |t| t.name.to_s == target_name.to_s }
-          backend = target.backend
-          backend.execute(params[:command])
+          puts "==> #{target_name}" if multiple_targets
+          success = false unless target.backend.execute(params[:command])
         end
+
+        exit 1 unless success
       end
 
       def targets
         Array(params[:target])
+      end
+
+      def split_targets(target)
+        Array(target).flat_map { |t| t.to_s.split(",") }.map(&:strip).reject(&:empty?)
       end
 
       def validate_inputs

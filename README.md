@@ -14,6 +14,13 @@ Open a rails console on your background jobs processing server to investigate fa
 
     styr --target=worker run bundle exec rails console
 
+Run a command on several targets at once by separating them with commas:
+
+    styr --target=web,db run df -h
+
+The tasks are run sequentially, and the task will be executed on all targets
+even if one of them fails. The exit code will be 1 if any of the tasks failed.
+
 ## Getting started
 
 ### Requirements
