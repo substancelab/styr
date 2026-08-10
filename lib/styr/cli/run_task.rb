@@ -56,7 +56,14 @@ class Styr
       private
 
       def all_targets
-        (Config.load["targets"] || {}).keys.map(&:to_s)
+        known_targets = (Config.load["targets"] || {}).keys.map(&:to_s)
+
+        if known_targets.empty?
+          puts "No targets configured."
+          exit 1
+        end
+
+        known_targets
       end
 
       def perform
