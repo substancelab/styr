@@ -18,6 +18,10 @@ Run a command on several targets at once by separating them with commas:
 
     styr --target=web,db run df -h
 
+Or run it on every configured target with `--target-all`:
+
+    styr --target-all run df -h
+
 The tasks are run sequentially, and the task will be executed on all targets
 even if one of them fails. The exit code will be 1 if any of the tasks failed.
 

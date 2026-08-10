@@ -18,13 +18,15 @@ class Styr
             description,
             "",
             "Usage: #{$0} --target TARGET run COMMAND",
+            "       #{$0} --target-all run COMMAND",
             "",
             "Options:",
-            "  TARGET    Target to run the command on",
+            "  TARGET    Target(s) to run the command on, comma-separated",
             "  COMMAND   Command to run on the target",
             "",
             "Example:",
             "  #{$0} --target production run 'ls -la'",
+            "  #{$0} --target-all run 'ls -la'",
           ].join("\n")
         end
 
@@ -34,10 +36,16 @@ class Styr
       end
 
       def process(args, global_options = {})
+        validate_target_options(global_options)
+
         self.params = {
           :command => args.join(" "),
           :help => global_options[:help],
-          :target => split_targets(global_options[:target]),
+          :target => if global_options[:"target-all"]
+            all_targets
+          else
+            split_targets(global_options[:target])
+          end,
         }
 
         validate_targets(params[:target])
@@ -46,6 +54,10 @@ class Styr
       end
 
       private
+
+      def all_targets
+        (Config.load["targets"] || {}).keys.map(&:to_s)
+      end
 
       def perform
         multiple_targets = targets.length > 1
@@ -72,6 +84,13 @@ class Styr
         return if params.errors.empty?
 
         puts params.errors.summary
+        exit 1
+      end
+
+      def validate_target_options(global_options)
+        return unless global_options[:"target-all"] && global_options[:target]
+
+        puts "Cannot use --target and --target-all together"
         exit 1
       end
 

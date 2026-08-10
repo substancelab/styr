@@ -12,6 +12,7 @@ class Styr
           opts.banner = "styr [options] [--target] task [task options]"
           opts.on("--help", "Show helpful information")
           opts.on("--target TARGET", "Target to perform the task on")
+          opts.on("--target-all", "Perform the task on all configured targets")
         end
 
         global_options = {}
