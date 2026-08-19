@@ -101,3 +101,4 @@ To add a new backend:
 ## Development
 
 - Create tests using minitest. When fixing a bug start by reproducing the bug in a test case.
+- Use standard to lint code syntax: `bundle exec rake standard`
