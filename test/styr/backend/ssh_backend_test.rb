@@ -8,7 +8,10 @@ class SSHBackendTest < Minitest::Test
       "backend" => "ssh", "user" => "deploy", "host" => "example.com", "path" => "/opt/app"
     )
     recorded = nil
-    backend.define_singleton_method(:system) { |*args| recorded = args; true }
+    backend.define_singleton_method(:system) { |*args|
+      recorded = args
+      true
+    }
 
     backend.execute("ls -la")
 
@@ -18,7 +21,10 @@ class SSHBackendTest < Minitest::Test
   def test_execute_without_user_omits_user_prefix
     backend = Styr::Backend::SSHBackend.new("backend" => "ssh", "host" => "example.com")
     recorded = nil
-    backend.define_singleton_method(:system) { |*args| recorded = args; true }
+    backend.define_singleton_method(:system) { |*args|
+      recorded = args
+      true
+    }
 
     backend.execute("ls")
 
@@ -28,7 +34,10 @@ class SSHBackendTest < Minitest::Test
   def test_execute_without_path_skips_cd
     backend = Styr::Backend::SSHBackend.new("backend" => "ssh", "user" => "deploy", "host" => "example.com")
     recorded = nil
-    backend.define_singleton_method(:system) { |*args| recorded = args; true }
+    backend.define_singleton_method(:system) { |*args|
+      recorded = args
+      true
+    }
 
     backend.execute("ls")
 

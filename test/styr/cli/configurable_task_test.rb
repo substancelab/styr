@@ -21,10 +21,10 @@ class ConfigurableTaskTest < Minitest::Test
     end
 
     Styr::CLI::RunTask.stub(:new, run_task) do
-      task_class.new.process(["--force"], :target => "production")
+      task_class.new.process(["--force"], target: "production")
     end
 
-    assert_equal([["git push heroku main", "--force"], { :target => "production" }], recorded)
+    assert_equal([["git push heroku main", "--force"], {target: "production"}], recorded)
     run_task.verify
   end
 end

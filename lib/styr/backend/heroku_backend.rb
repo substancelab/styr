@@ -14,7 +14,7 @@ class Styr
       end
 
       def execute(command)
-        system("heroku", "run", command, "--app", @config['app'])
+        system("heroku", "run", command, "--app", @config["app"])
       end
 
       def to_s

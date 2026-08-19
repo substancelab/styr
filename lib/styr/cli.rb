@@ -16,7 +16,7 @@ class Styr
         end
 
         global_options = {}
-        global_parser.order!(:into => global_options)
+        global_parser.order!(into: global_options)
 
         task_name = ARGV[0].to_s.downcase
         task = tasks.find do |task_class|
@@ -37,7 +37,7 @@ class Styr
         else
           puts "Unknown task: #{task_name}"
           puts
-          puts "Expected one of #{tasks.map(&:name).join(', ')}"
+          puts "Expected one of #{tasks.map(&:name).join(", ")}"
           exit 1
         end
       end

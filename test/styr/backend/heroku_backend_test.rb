@@ -5,7 +5,7 @@ require_relative "../../test_helper"
 class HerokuBackendTest < Minitest::Test
   def setup
     super
-    @config = { "backend" => "heroku", "app" => "myapp" }
+    @config = {"backend" => "heroku", "app" => "myapp"}
     @backend = Styr::Backend::HerokuBackend.new(@config)
   end
 

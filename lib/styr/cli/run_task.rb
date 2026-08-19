@@ -26,7 +26,7 @@ class Styr
             "",
             "Example:",
             "  #{$0} --target production run 'ls -la'",
-            "  #{$0} --target-all run 'ls -la'",
+            "  #{$0} --target-all run 'ls -la'"
           ].join("\n")
         end
 
@@ -39,13 +39,13 @@ class Styr
         validate_target_options(global_options)
 
         self.params = {
-          :command => args.join(" "),
-          :help => global_options[:help],
-          :target => if global_options[:"target-all"]
-            all_targets
-          else
-            split_targets(global_options[:target])
-          end,
+          command: args.join(" "),
+          help: global_options[:help],
+          target: if global_options[:"target-all"]
+                    all_targets
+                  else
+                    split_targets(global_options[:target])
+                  end
         }
 
         validate_targets(params[:target])
@@ -111,7 +111,7 @@ class Styr
         end
         return if target_names.any? && unknown_targets.empty?
 
-        puts "Unknown targets: #{unknown_targets.join(', ')}. Expected one of: #{known_targets.join(', ')}"
+        puts "Unknown targets: #{unknown_targets.join(", ")}. Expected one of: #{known_targets.join(", ")}"
         exit 1
       end
     end

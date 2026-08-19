@@ -11,7 +11,7 @@ class TargetsTaskTest < Minitest::Test
   end
 
   def test_process_prints_table_of_targets
-    config = { "targets" => { "production" => { "backend" => "heroku", "app" => "myapp" } } }
+    config = {"targets" => {"production" => {"backend" => "heroku", "app" => "myapp"}}}
 
     Styr::Config.stub(:load, config) do
       out, = TTY::Screen.stub(:width, 80) { capture_io { Styr::CLI::TargetsTask.new.process([], {}) } }

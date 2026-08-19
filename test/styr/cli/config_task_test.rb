@@ -11,7 +11,7 @@ class ConfigTaskTest < Minitest::Test
   end
 
   def test_process_prints_config_contents_when_present
-    Styr::Config.stub(:load, { "targets" => {} }) do
+    Styr::Config.stub(:load, {"targets" => {}}) do
       out, = capture_io { Styr::CLI::ConfigTask.new.process([], {}) }
       assert_match(/targets/, out)
     end

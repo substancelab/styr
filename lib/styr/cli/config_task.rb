@@ -17,7 +17,7 @@ class Styr
           [
             description,
             "",
-            "Usage: #{$0} #{name}",
+            "Usage: #{$0} #{name}"
           ].join("\n")
         end
 
@@ -28,7 +28,7 @@ class Styr
 
       def process(args, global_options = {})
         self.params = {
-          :help => global_options[:help],
+          help: global_options[:help]
         }
 
         perform

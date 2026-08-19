@@ -31,7 +31,7 @@ class Styr
                   "",
                   "Options:",
                   "  TARGET    Target to run the command on",
-                  "  ARGS      Additional arguments appended to the configured command",
+                  "  ARGS      Additional arguments appended to the configured command"
                 ].join("\n")
               end
             end

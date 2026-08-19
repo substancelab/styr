@@ -7,7 +7,7 @@ class TargetTest < Minitest::Test
     target = Styr::Target.new("production", "backend" => "heroku", "app" => "myapp")
 
     assert_equal("production", target.name)
-    assert_equal({ "backend" => "heroku", "app" => "myapp" }, target.config)
+    assert_equal({"backend" => "heroku", "app" => "myapp"}, target.config)
   end
 
   def test_backend_is_built_lazily_from_config

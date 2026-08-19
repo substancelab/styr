@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "set"
 require "singleton"
 
 require_relative "styr/backend"
@@ -43,7 +42,7 @@ class Styr
       Styr::CLI::ConfigTask,
       Styr::CLI::RunTask,
       Styr::CLI::TargetsTask,
-      Styr::CLI::TasksTask,
+      Styr::CLI::TasksTask
     ]
   end
 

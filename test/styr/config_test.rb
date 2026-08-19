@@ -10,7 +10,7 @@ class ConfigTest < Minitest::Test
   end
 
   def test_load_parses_toml_file_when_present
-    parsed = { "targets" => { "production" => { "backend" => "heroku", "app" => "myapp" } } }
+    parsed = {"targets" => {"production" => {"backend" => "heroku", "app" => "myapp"}}}
 
     File.stub(:exist?, true) do
       TomlRB.stub(:load_file, parsed) do
@@ -21,13 +21,13 @@ class ConfigTest < Minitest::Test
 
   def test_load_memoizes_result
     File.stub(:exist?, true) do
-      TomlRB.stub(:load_file, { "a" => 1 }) do
+      TomlRB.stub(:load_file, {"a" => 1}) do
         Styr::Config.load
       end
 
       # Even though the file would now parse differently, the memoized value is returned.
-      TomlRB.stub(:load_file, { "a" => 2 }) do
-        assert_equal({ "a" => 1 }, Styr::Config.load)
+      TomlRB.stub(:load_file, {"a" => 2}) do
+        assert_equal({"a" => 1}, Styr::Config.load)
       end
     end
   end
