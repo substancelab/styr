@@ -12,6 +12,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "minitest", "~> 5.25"
+  gem "minitest"
+  gem "minitest-mock"
   gem "rake"
 end
