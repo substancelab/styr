@@ -11,7 +11,7 @@ class Styr
           [
             config.values_at("user", "host").compact.join("@"),
             config["path"]
-        ].join(":")
+          ].join(":")
         end
       end
 
@@ -22,11 +22,11 @@ class Styr
       def execute(command)
         # Build SSH connection string
         ssh_target = @config["host"]
-        ssh_target = "#{@config['user']}@#{ssh_target}" if @config["user"]
+        ssh_target = "#{@config["user"]}@#{ssh_target}" if @config["user"]
 
         # Build remote command with optional path change
         remote_command = if @config["path"]
-          "cd #{@config['path']} && #{command}"
+          "cd #{@config["path"]} && #{command}"
         else
           command
         end

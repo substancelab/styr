@@ -97,3 +97,8 @@ To add a new backend:
 - `lib/styr/target.rb` - Base target class
 - `lib/styr/backend.rb` - Backend factory
 - `lib/styr/backend/` - Backend implementations
+
+## Development
+
+- Create tests using minitest. When fixing a bug start by reproducing the bug in a test case.
+- Use standard to lint code syntax: `bundle exec rake standard`

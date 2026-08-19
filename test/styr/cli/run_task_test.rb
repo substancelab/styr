@@ -6,9 +6,9 @@ class RunTaskTest < Minitest::Test
   def config
     {
       "targets" => {
-        "production" => { "backend" => "heroku", "app" => "myapp" },
-        "staging" => { "backend" => "heroku", "app" => "myapp-staging" },
-      },
+        "production" => {"backend" => "heroku", "app" => "myapp"},
+        "staging" => {"backend" => "heroku", "app" => "myapp-staging"}
+      }
     }
   end
 
@@ -17,7 +17,7 @@ class RunTaskTest < Minitest::Test
 
     out, = capture_io do
       assert_raises(SystemExit) do
-        task.process(["ls"], :target => "production", :"target-all" => true)
+        task.process(["ls"], target: "production", "target-all": true)
       end
     end
 
@@ -29,10 +29,13 @@ class RunTaskTest < Minitest::Test
       task = Styr::CLI::RunTask.new
       executed = []
       Styr.instance.targets.each do |target|
-        target.backend.define_singleton_method(:execute) { |cmd| executed << [target.name, cmd]; true }
+        target.backend.define_singleton_method(:execute) { |cmd|
+          executed << [target.name, cmd]
+          true
+        }
       end
 
-      capture_io { task.process(["ls", "-la"], :target => "production, staging") }
+      capture_io { task.process(["ls", "-la"], target: "production, staging") }
 
       assert_equal([["production", "ls -la"], ["staging", "ls -la"]], executed)
     end
@@ -43,10 +46,13 @@ class RunTaskTest < Minitest::Test
       task = Styr::CLI::RunTask.new
       executed = []
       Styr.instance.targets.each do |target|
-        target.backend.define_singleton_method(:execute) { |cmd| executed << target.name; true }
+        target.backend.define_singleton_method(:execute) { |cmd|
+          executed << target.name
+          true
+        }
       end
 
-      capture_io { task.process(["ls"], :"target-all" => true) }
+      capture_io { task.process(["ls"], "target-all": true) }
 
       assert_equal(%w[production staging], executed)
     end
@@ -57,7 +63,7 @@ class RunTaskTest < Minitest::Test
       task = Styr::CLI::RunTask.new
 
       out, = capture_io do
-        assert_raises(SystemExit) { task.process(["ls"], :"target-all" => true) }
+        assert_raises(SystemExit) { task.process(["ls"], "target-all": true) }
       end
 
       assert_match(/No targets configured\./, out)
@@ -69,7 +75,7 @@ class RunTaskTest < Minitest::Test
       task = Styr::CLI::RunTask.new
 
       out, = capture_io do
-        assert_raises(SystemExit) { task.process(["ls"], :target => "bogus") }
+        assert_raises(SystemExit) { task.process(["ls"], target: "bogus") }
       end
 
       assert_match(/Unknown targets: bogus/, out)
@@ -88,10 +94,10 @@ class RunTaskTest < Minitest::Test
     Styr::Config.stub(:load, config) do
       task = Styr::CLI::RunTask.new
       Styr.instance.targets.each do |target|
-        target.backend.define_singleton_method(:execute) { |_cmd| target.name == "staging" ? false : true }
+        target.backend.define_singleton_method(:execute) { |_cmd| !(target.name == "staging") }
       end
 
-      capture_io { assert_raises(SystemExit) { task.process(["ls"], :"target-all" => true) } }
+      capture_io { assert_raises(SystemExit) { task.process(["ls"], "target-all": true) } }
     end
   end
 
@@ -100,10 +106,10 @@ class RunTaskTest < Minitest::Test
       task = Styr::CLI::RunTask.new
       Styr.instance.targets.each { |t| t.backend.define_singleton_method(:execute) { |_cmd| true } }
 
-      out, = capture_io { task.process(["ls"], :target => "production") }
+      out, = capture_io { task.process(["ls"], target: "production") }
       refute_match(/==>/, out)
 
-      out, = capture_io { task.process(["ls"], :"target-all" => true) }
+      out, = capture_io { task.process(["ls"], "target-all": true) }
       assert_match(/==> production/, out)
       assert_match(/==> staging/, out)
     end

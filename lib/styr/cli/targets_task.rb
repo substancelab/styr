@@ -17,7 +17,7 @@ class Styr
           [
             description,
             "",
-            "Usage: #{$0} targets",
+            "Usage: #{$0} targets"
           ].join("\n")
         end
 
@@ -28,7 +28,7 @@ class Styr
 
       def process(args, global_options = {})
         self.params = {
-          :help => global_options[:help],
+          help: global_options[:help]
         }
 
         perform
@@ -43,11 +43,11 @@ class Styr
 
         if targets.any?
           table = TTY::Table.new(
-            :header => ["Name", "Backend", "Details"],
-            :rows => targets
+            header: ["Name", "Backend", "Details"],
+            rows: targets
           )
 
-          puts table.render(:unicode, padding: [0,1])
+          puts table.render(:unicode, padding: [0, 1])
         else
           puts "No targets configured."
         end

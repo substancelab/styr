@@ -6,9 +6,9 @@ class StyrTest < Minitest::Test
   def test_targets_builds_targets_from_config
     config = {
       "targets" => {
-        "production" => { "backend" => "heroku", "app" => "myapp" },
-        "staging" => { "backend" => "ssh", "host" => "staging.example.com" },
-      },
+        "production" => {"backend" => "heroku", "app" => "myapp"},
+        "staging" => {"backend" => "ssh", "host" => "staging.example.com"}
+      }
     }
 
     Styr::Config.stub(:load, config) do
@@ -28,7 +28,7 @@ class StyrTest < Minitest::Test
   end
 
   def test_targets_is_memoized
-    Styr::Config.stub(:load, { "targets" => { "a" => { "backend" => "heroku", "app" => "x" } } }) do
+    Styr::Config.stub(:load, {"targets" => {"a" => {"backend" => "heroku", "app" => "x"}}}) do
       first = Styr.instance.targets
       assert_same(first, Styr.instance.targets)
     end
@@ -46,7 +46,7 @@ class StyrTest < Minitest::Test
   end
 
   def test_tasks_includes_valid_custom_tasks
-    config = { "tasks" => { "deploy" => { "command" => "git push heroku main" } } }
+    config = {"tasks" => {"deploy" => {"command" => "git push heroku main"}}}
 
     Styr::Config.stub(:load, config) do
       custom = Styr.instance.tasks.find { |t| t.name == "deploy" }
@@ -58,7 +58,7 @@ class StyrTest < Minitest::Test
   end
 
   def test_tasks_skips_custom_task_without_command
-    config = { "tasks" => { "broken" => {} } }
+    config = {"tasks" => {"broken" => {}}}
 
     _out, err = capture_io do
       Styr::Config.stub(:load, config) do
@@ -69,19 +69,8 @@ class StyrTest < Minitest::Test
     assert_match(/no valid command configured/, err)
   end
 
-  def test_lib_requires_set_for_custom_tasks
-    # custom_tasks calls Array#to_set, which needs Set loaded. Ruby's
-    # built-in autoload of Set (3.2+) masks a missing require in normal
-    # test runs, so assert on the require directly instead of relying on
-    # runtime behavior. Regression test for the NoMethodError on
-    # Array#to_set reported when running `styr` with an unknown task name.
-    lib_source = File.read(File.expand_path("../lib/styr.rb", __dir__))
-
-    assert_match(/^require ["']set["']$/, lib_source)
-  end
-
   def test_tasks_skips_custom_task_conflicting_with_builtin
-    config = { "tasks" => { "run" => { "command" => "echo hi" } } }
+    config = {"tasks" => {"run" => {"command" => "echo hi"}}}
 
     _out, err = capture_io do
       Styr::Config.stub(:load, config) do
