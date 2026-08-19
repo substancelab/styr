@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "set"
 require "singleton"
 
 require_relative "styr/backend"

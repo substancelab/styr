@@ -69,6 +69,17 @@ class StyrTest < Minitest::Test
     assert_match(/no valid command configured/, err)
   end
 
+  def test_lib_requires_set_for_custom_tasks
+    # custom_tasks calls Array#to_set, which needs Set loaded. Ruby's
+    # built-in autoload of Set (3.2+) masks a missing require in normal
+    # test runs, so assert on the require directly instead of relying on
+    # runtime behavior. Regression test for the NoMethodError on
+    # Array#to_set reported when running `styr` with an unknown task name.
+    lib_source = File.read(File.expand_path("../lib/styr.rb", __dir__))
+
+    assert_match(/^require ["']set["']$/, lib_source)
+  end
+
   def test_tasks_skips_custom_task_conflicting_with_builtin
     config = { "tasks" => { "run" => { "command" => "echo hi" } } }
 
