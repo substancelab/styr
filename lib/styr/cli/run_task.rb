@@ -21,7 +21,8 @@ class Styr
             "       #{$0} --target-all run COMMAND",
             "",
             "Options:",
-            "  TARGET    Target(s) to run the command on, comma-separated",
+            "  TARGET    Target(s) to run the command on, comma-separated.",
+            "            May be omitted when only one target is configured.",
             "  COMMAND   Command to run on the target",
             "",
             "Example:",
@@ -43,8 +44,10 @@ class Styr
           help: global_options[:help],
           target: if global_options[:"target-all"]
                     all_targets
-                  else
+                  elsif global_options[:target]
                     split_targets(global_options[:target])
+                  else
+                    default_targets
                   end
         }
 
@@ -64,6 +67,13 @@ class Styr
         end
 
         known_targets
+      end
+
+      # When exactly one target is configured, use it without requiring
+      # --target.
+      def default_targets
+        known_targets = (Config.load["targets"] || {}).keys.map(&:to_s)
+        (known_targets.length == 1) ? known_targets : []
       end
 
       def perform

@@ -90,6 +90,24 @@ class RunTaskTest < Minitest::Test
     end
   end
 
+  def test_process_defaults_to_only_target_when_none_specified
+    single = {"targets" => {"production" => {"backend" => "heroku", "app" => "myapp"}}}
+    Styr::Config.stub(:load, single) do
+      task = Styr::CLI::RunTask.new
+      executed = []
+      Styr.instance.targets.each do |target|
+        target.backend.define_singleton_method(:execute) { |cmd|
+          executed << [target.name, cmd]
+          true
+        }
+      end
+
+      capture_io { task.process(["ls"], {}) }
+
+      assert_equal([["production", "ls"]], executed)
+    end
+  end
+
   def test_process_exits_when_any_target_execution_fails
     Styr::Config.stub(:load, config) do
       task = Styr::CLI::RunTask.new

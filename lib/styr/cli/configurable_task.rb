@@ -30,7 +30,8 @@ class Styr
                   "Usage: #{$0} --target TARGET #{name} [ARGS]",
                   "",
                   "Options:",
-                  "  TARGET    Target to run the command on",
+                  "  TARGET    Target to run the command on.",
+                  "            May be omitted when only one target is configured.",
                   "  ARGS      Additional arguments appended to the configured command"
                 ].join("\n")
               end
